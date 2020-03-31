@@ -1,51 +1,30 @@
 <template>
   <el-main>
     <el-form :inline="true" :model="queryForm" class="demo-form-inline"></el-form>
+
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="order_id" label="订单"></el-table-column>
+      <el-table-column label="出发地→目的地">
+        <template slot-scope="scope">{{scope.row.order_departure}}→{{scope.row.order_destination}}</template>
+      </el-table-column>
       <el-table-column prop="order_cargotype" label="货物类型"></el-table-column>
-      <el-table-column prop="order_departure" label="出发地"></el-table-column>
-      <el-table-column prop="order_destination" label="到达地"></el-table-column>
+      <el-table-column prop="order_weight" label="货物重量"></el-table-column>
+      <el-table-column prop="order_creationtime" label="下单时间"></el-table-column>
       <el-table-column prop="order_linkmanphone" label="联系电话"></el-table-column>
       <el-table-column prop="order_linkmanname" label="联系姓名"></el-table-column>
-      <el-table-column label="类型" width="120">
+      <el-table-column label="下单用户" width="120">
         <template slot-scope="scope">
-          <span v-for="a in scope.row.carList">{{a.cartype_name}}</span>
+          <span v-for="a in scope.row.userList">{{a.user_name}}</span>
         </template>
       </el-table-column>
+
+      <el-table-column prop="order_reason" label="备注"></el-table-column>
+
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row.order_id)" type="text" size="small">详情</el-button>
+          <el-button @click="handleClick(scope.row.order_detail)" type="text" size="small">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog
-      :v-model="look"
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
-      是否到达:{{look.order_detail_ifarrive}}
-      <br />
-      <br />
-      司机:{{look.order_detail_drivername}}
-      <br />
-      <br />
-      司机电话:{{look.order_detail_driverphone}}
-      <br />
-      <br />
-      车牌号:{{look.order_detail_licenseplatenumber}}
-      <br />
-      <br />
-      运费险:{{look.order_detail_freightinsurance}}
-      <br />
-      <br />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-      </span>
-    </el-dialog>
 
     <br />
     <el-pagination
@@ -67,27 +46,18 @@ export default {
       pageCount: 0,
       queryForm: {
         pageNo: 0,
-        pageSize: 5
+        pageSize: 5,
+        order_isverify: "3"
       },
       carList: [],
       detailList: [],
-      dialogVisible: false,
       look: {}
     };
   },
   methods: {
-    handleClick(order_id) {
-      this.dialogVisible = true;
-      axios({
-        url: "/rest/detail/byid",
-        method: "get",
-        params: { order_detail_id: order_id }
-      }).then(res => {
-        this.look = res.data;
-      });
-    },
-    handleClose() {
-      this.dialogVisible = false;
+    handleClick(order_detail) {
+      localStorage.setItem("order_id", JSON.stringify(order_detail));
+      this.$router.push("/logistcsOrderDetail");
     },
     getList() {
       axios({

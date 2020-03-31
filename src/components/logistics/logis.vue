@@ -117,9 +117,9 @@
                 <el-radio-button label="55">整车货运</el-radio-button>
                 <el-radio-button label="69">国际物流</el-radio-button>
                 <el-radio-button label="82">快递公司</el-radio-button>
-                <el-radio-button label="92">物流加盟</el-radio-button>
-                <el-radio-button label="94">物流设备</el-radio-button>
-                <el-radio-button label="95">其他咨询</el-radio-button>
+                <el-radio-button label="92">车辆展示</el-radio-button>
+                <el-radio-button label="94">订单查看</el-radio-button>
+                <el-radio-button label="95">后台管理</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -320,21 +320,13 @@ export default {
         this.curnum = res.data.pageNum;
       });
     },
-    // 搜索下分类
     onSubmit() {
-      if (this.queryForm.t_type_id != "0") {
-        this.TreeSee = false; //干掉萝卜兔
-        this.TreeTable = true; //放开表格树
-        // this.Myposition = "absolute"; //暂时下先不用
-        axios({
-          url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=4",
-          method: "post",
-          data: qs.stringify(this.queryForm)
-        }).then(res => {
-          this.pageCount = res.data.pageSize;
-          this.curnum = res.data.pageNum;
-        });
-      } else {
+      if (this.queryForm.t_type_id == "95") {
+        this.$router.push("/logisticsPageback");
+      } else if (this.queryForm.t_type_id == "94") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "92") {
+        this.$router.push("/logistcsOrder");
       }
     },
     /*修改树的样式*/

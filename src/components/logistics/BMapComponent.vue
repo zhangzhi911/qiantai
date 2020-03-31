@@ -1,9 +1,17 @@
 <template>
   <el-container>
     <el-container id="newmap" style="margin-top:20px;margin-left:20px; height:600px;"></el-container>
-    <el-aside width="200px">
-      <!-- 
+    <el-aside width="120px">
       <br />
+      <el-button
+        type="primary"
+        icon="el-icon-location"
+        @click="carip('121.487899486', '31.24916171')"
+      >当前位置</el-button>
+      <br />
+      <br />
+      <el-button type="primary" icon="el-icon-map-location" @click="getAddress">收货地址</el-button>
+      <!-- 
         <el-input
         type="text"
         id="suggestId"
@@ -14,11 +22,11 @@
       ></el-input>
       <el-button @click="getAddress">搜索</el-button>-->
       <!-- 这个地方是用的table一列一列展示 -->
-      <el-aside style="margin-top:15px">
+      <!-- <el-aside style="margin-top:15px">
         <el-table :data="buildinglist" @row-click="skiptomap">
           <el-table-column prop="name" lable="name" align="center"></el-table-column>
         </el-table>
-      </el-aside>
+      </el-aside>-->
       <!-- 这里使用的是树，省份信息不全 -->
       <!-- <div>
         <el-tree :data="buildinglist2" node-key="id" @node-click="handleNodeClick"></el-tree>
@@ -27,6 +35,7 @@
   </el-container>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "Mapbox",
   data() {
@@ -80,7 +89,7 @@ export default {
           ]
         }
       ],
-      address_detail: null, //详细地址
+      address_detail: "河北", //详细地址
       jd: 121.487899486, //初始地图中心点的经纬度
       wd: 31.24916171,
       map: {},
@@ -120,10 +129,31 @@ export default {
       this.map.centerAndZoom(this.address_detail, 14);
       var infoWindow = new BMap.InfoWindow(this.address_detail); // 创建信息窗口对象
       this.map.openInfoWindow(infoWindow, this.address_detail); //开启信息窗口
+    },
+    // 定位车辆信息
+    getOrderDetail2() {
+      let order_id = localStorage.getItem("order_id");
+      axios({
+        url: "/rest/detail/byid?order_detail_id=" + order_id,
+        method: "post"
+      }).then(res => {
+        let x = res.data.order_detail_addressx;
+        let y = res.data.order_detail_addressy;
+        this.address_detail = res.data.order_detail_destination;
+        this.carip(x, y);
+      });
+    },
+    // 车辆位置调用
+    carip(x, y) {
+      this.point = new BMap.Point(x, y);
+      this.map.centerAndZoom(this.point, 14);
+      var infoWindow = new BMap.InfoWindow("车辆当前位置"); // 创建信息窗口对象
+      this.map.openInfoWindow(infoWindow, this.point); //开启信息窗口
     }
   },
   mounted: function() {
     this.loadmap("121.487899486", "31.24916171");
+    this.getOrderDetail2();
   }
 };
 </script>

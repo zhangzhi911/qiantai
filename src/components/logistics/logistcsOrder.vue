@@ -117,9 +117,9 @@
                 <el-radio-button label="55">整车货运</el-radio-button>
                 <el-radio-button label="69">国际物流</el-radio-button>
                 <el-radio-button label="82">快递公司</el-radio-button>
-                <el-radio-button label="92">物流加盟</el-radio-button>
-                <el-radio-button label="94">物流设备</el-radio-button>
-                <el-radio-button label="95">其他咨询</el-radio-button>
+                <el-radio-button label="92">车辆展示</el-radio-button>
+                <el-radio-button label="94">订单查看</el-radio-button>
+                <el-radio-button label="95">后台管理</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -168,10 +168,11 @@
                       mode="horizontal"
                       @select="handleSelect"
                     >
-                      <el-menu-item index="1" @click="screen">所有订单</el-menu-item>
-                      <el-menu-item index="2" @click="screen">已收货</el-menu-item>
-                      <el-menu-item index="3" @click="screen">未完成</el-menu-item>
-                      <el-menu-item index="4" @click="screen">驳回</el-menu-item>
+                      <el-menu-item index="1" @click="screen('')">所有订单</el-menu-item>
+                      <el-menu-item index="2" @click="screen('3')">运送中</el-menu-item>
+                      <el-menu-item index="3" @click="screen('4')">已收货</el-menu-item>
+                      <el-menu-item index="4" @click="screen('1')">未发货</el-menu-item>
+                      <el-menu-item index="5" @click="screen('2')">驳回</el-menu-item>
                     </el-menu>
                     <el-table border :data="tableData" stripe>
                       <el-table-column label="出发地→目的地">
@@ -189,11 +190,16 @@
 
                       <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                          <el-button
-                            @click="handleClick(scope.row.order_id)"
-                            type="text"
-                            size="small"
-                          >详情</el-button>
+                          <span v-if="scope.row.order_isverify!==2">
+                            <el-button
+                              @click="handleClick(scope.row.order_id)"
+                              type="text"
+                              size="small"
+                            >查看详情</el-button>
+                          </span>
+                          <span v-if="scope.row.order_isverify==2">
+                            <el-button type="danger" size="small" :disabled="true">禁止操作</el-button>
+                          </span>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -287,7 +293,9 @@ export default {
       UserForm: { user: {} }, //用于用户存储
       queryForm: {
         pageNo: 1,
-        pageSize: 10
+        pageSize: 10,
+        order_isverify: "1",
+        user_id: 1
       }, //单选框
 
       src: require("../../assets/logo3.jpg"), //太平洋logo
@@ -327,7 +335,10 @@ export default {
         });
       });
     },
-    screen(id) {},
+    screen(id) {
+      this.queryForm.order_isverify = id;
+      this.getList();
+    },
     handleSelect(key, keyPath) {
       //导航菜单点击事件
       console.log(key, keyPath);
@@ -347,33 +358,20 @@ export default {
         // this.Myposition = "absolute"; //暂时下先不用
       }
       // console.log(this.GoodsNames.findName);
-      axios({
-        url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=12",
-        method: "post",
-        data: qs.stringify({ t_name: this.GoodsNames.findName })
-      }).then(res => {
-        this.pageCount = res.data.pageSize;
-        this.curnum = res.data.pageNum;
-      });
-    },
-    // 搜索下分类
-    onSubmit() {
-      if (this.queryForm.t_type_id != "0") {
-        this.TreeSee = false; //干掉萝卜兔
-        this.TreeTable = true; //放开表格树
-        // this.Myposition = "absolute"; //暂时下先不用
-        axios({
-          url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=4",
-          method: "post",
-          data: qs.stringify(this.queryForm)
-        }).then(res => {
-          this.pageCount = res.data.pageSize;
-          this.curnum = res.data.pageNum;
-        });
-      } else {
-      }
     },
 
+    // 搜索下分类
+    onSubmit() {
+      if (this.queryForm.t_type_id == "95") {
+        this.$router.push("/logisticsPageback");
+      } else if (this.queryForm.t_type_id == "94") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "92") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "0") {
+        this.$router.push("/LogisticsIndex");
+      }
+    },
     // 判断用户
     getUser() {
       /*this.UserForm = getToken();*/

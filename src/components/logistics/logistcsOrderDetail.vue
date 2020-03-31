@@ -117,9 +117,9 @@
                 <el-radio-button label="55">整车货运</el-radio-button>
                 <el-radio-button label="69">国际物流</el-radio-button>
                 <el-radio-button label="82">快递公司</el-radio-button>
-                <el-radio-button label="92">物流加盟</el-radio-button>
-                <el-radio-button label="94">物流设备</el-radio-button>
-                <el-radio-button label="95">其他咨询</el-radio-button>
+                <el-radio-button label="92">车辆展示</el-radio-button>
+                <el-radio-button label="94">订单管理</el-radio-button>
+                <el-radio-button label="95">后台管理</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -182,15 +182,24 @@
                       </el-col>
                       <el-col :span="13">
                         <div style="margin-top: 30px;float: left;margin-left: 10px">
-                          <font size="8" style="color: #475669">河北→山西</font>
-                          <font size="6" style="color: #475669">、晋k12345</font>
+                          <font
+                            size="8"
+                            style="color: #475669"
+                          >{{order_detail.order_detail_departure}}→{{order_detail.order_detail_destination}}</font>
+                          <font
+                            size="6"
+                            style="color: #475669"
+                          >、{{order_detail.order_detail_destination}}</font>
                           <br />
                           <el-tag type="success">已实名</el-tag>
                           <br />
                           <br />
                           <h4>车辆信息:</h4>
-                          <font size="3" style="color: #475669">车辆最大载重：2000kg;</font>
-                          <font size="3" style="color: #475669">重量：200kg;</font>
+                          <font
+                            size="3"
+                            style="color: #475669"
+                          >车辆最大载重：{{order_detail.order_detail_maximum}}</font>
+                          <font size="3" style="color: #475669">重量：五吨;</font>
                           <br />
                           <font size="3" style="color: #475669">轴数：8;</font>
                           <br />
@@ -199,9 +208,9 @@
                           <br />
 
                           <font size="5">
-                            <b>司机:</b>
+                            <b>{{order_detail.order_detail_drivername}}</b>
                           </font>
-                          <font size="5">赵四</font>&nbsp;&nbsp;
+                          &nbsp;&nbsp;
                           <el-button type="warning">联系司机:18662746299</el-button>
                           <br />
                         </div>
@@ -328,7 +337,8 @@ export default {
         t_type_id: ""
       }, //查询
       curnum: 1, //当前页
-      pageCount: 10 //最大页数
+      pageCount: 10, //最大页数
+      order_detail: {}
     };
   },
   methods: {
@@ -360,20 +370,16 @@ export default {
       });
     },
     // 搜索下分类
+
     onSubmit() {
-      if (this.queryForm.t_type_id != "0") {
-        this.TreeSee = false; //干掉萝卜兔
-        this.TreeTable = true; //放开表格树
-        // this.Myposition = "absolute"; //暂时下先不用
-        axios({
-          url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=4",
-          method: "post",
-          data: qs.stringify(this.queryForm)
-        }).then(res => {
-          this.pageCount = res.data.pageSize;
-          this.curnum = res.data.pageNum;
-        });
-      } else {
+      if (this.queryForm.t_type_id == "95") {
+        this.$router.push("/logisticsPageback");
+      } else if (this.queryForm.t_type_id == "94") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "92") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "0") {
+        this.$router.push("/LogisticsIndex");
       }
     },
     /*修改树的样式*/
@@ -392,12 +398,25 @@ export default {
         this.TreeSee = false;
         this.Myposition = "absolute";
       }
+    },
+    getOrderDetail() {
+      let order_id = localStorage.getItem("order_id");
+      console.log(order_id);
+      axios({
+        url: "/rest/detail/byid?order_detail_id=" + order_id,
+        method: "post"
+      }).then(res => {
+        this.order_detail = res.data;
+        console.log(this.order_detail);
+      });
     }
   },
   mounted() {
     this.getUser(), (this.action = "http://localhost:8100/upLoadExcel/");
   },
-  created() {}
+  created() {
+    this.getOrderDetail();
+  }
 };
 </script>
 <style>

@@ -37,7 +37,13 @@
           <div style="background-color: #FF9640">
             <el-form>
               <el-form-item style="margin-bottom: 0px;">
-                <el-radio-group fill="#acd6ff" text-color="#fffff" style="margin-left: 270px">
+                <el-radio-group
+                  fill="#acd6ff"
+                  text-color="#fffff"
+                  v-model="queryForm.t_type_id"
+                  @change="onSubmit"
+                  style="margin-left: 270px"
+                >
                   <el-radio-button label="0">首页</el-radio-button>
                   <el-radio-button label="1">物流园区</el-radio-button>
                   <el-radio-button label="14">货源信息</el-radio-button>
@@ -46,9 +52,9 @@
                   <el-radio-button label="55">整车货运</el-radio-button>
                   <el-radio-button label="69">国际物流</el-radio-button>
                   <el-radio-button label="82">快递公司</el-radio-button>
-                  <el-radio-button label="92">物流加盟</el-radio-button>
-                  <el-radio-button label="94">物流设备</el-radio-button>
-                  <el-radio-button label="95">其他咨询</el-radio-button>
+                  <el-radio-button label="92">车辆展示</el-radio-button>
+                  <el-radio-button label="94">订单管理</el-radio-button>
+                  <el-radio-button label="95">后台管理</el-radio-button>
                 </el-radio-group>
               </el-form-item>
             </el-form>
@@ -230,6 +236,12 @@ export default {
   },
   data() {
     return {
+      queryForm: {
+        pageNo: 1,
+        pageSize: 10,
+        order_isverify: "1",
+        user_id: 1
+      }, //单选框
       fit: "fill",
       activeIndex: "1",
       activeIndex2: "1",
@@ -249,6 +261,17 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    onSubmit() {
+      if (this.queryForm.t_type_id == "95") {
+        this.$router.push("/logisticsPageback");
+      } else if (this.queryForm.t_type_id == "94") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "92") {
+        this.$router.push("/logistcsOrder");
+      } else if (this.queryForm.t_type_id == "0") {
+        this.$router.push("/LogisticsIndex");
+      }
     }
   }
 };
