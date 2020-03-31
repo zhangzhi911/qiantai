@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap" :style="divimg">
     <div>
-      <p class="p-title">欢迎使用太平洋购物</p>
+      <p class="p-title">欢迎使用太平洋物流</p>
 
       <div class="ms-login">
         <div class="ms-title">欢迎登录</div>
@@ -72,6 +72,7 @@ import Qs from "qs";
 import router from "@/router";
 import axios from "axios";
 export default {
+  title: "登录",
   name: "login",
   data() {
     return {

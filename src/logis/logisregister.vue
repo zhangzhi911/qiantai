@@ -1,7 +1,7 @@
 <template>
   <div class="register-wrap" :style="divimg">
     <div>
-      <p class="p-title">欢迎使用太平洋购物</p>
+      <p class="p-title">欢迎使用太平洋物流</p>
     </div>
     <div class="ms-register">
       <div class="ms-title">欢迎注册</div>
