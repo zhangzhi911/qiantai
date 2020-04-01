@@ -155,32 +155,42 @@
                 <el-form :inline="true" :model="formInline" class="demo-form-inline"  style="margin-left: 350px">
                   <el-form-item >
                     <table cellspacing="0" border="1" style="border-collapse:collapse;">
+                      <tr>
+                        司机名字：<td><el-input v-model="formInline.driver_name" placeholder="司机名字" style="width: 310px"></el-input></td><hr>
+                        驾照等级：<td><el-input v-model="formInline.driver_level" placeholder="驾照等级" style="width: 310px"></el-input></td>
+                      </tr><hr>
                     <tr >
-                      出发地：<td><el-input v-model="formInline.order_departure" placeholder="出发地" style="width: 310px"></el-input></td><hr>
-                      到达地：<td><el-input v-model="formInline.order_destination" placeholder="到达地" style="width: 310px"></el-input></td>
+                      随行人：<td><el-input v-model="formInline.driver_man" placeholder="随行人" style="width: 310px"></el-input></td><hr>
+                      车辆类型：<td>
+                      <el-select v-model="formInline.car_id" placeholder="车辆类型" style="width: 310px">
+                        <el-option label="奔驰" value="1"></el-option>
+                        <el-option label="奥迪" value="2"></el-option>
+                      </el-select></td>
                     </tr><hr>
                     <tr>
-                      重量：<td><el-input v-model="formInline.order_weight" placeholder="重量" style="width: 310px"></el-input></td><hr>
-                      体积：<td><el-input v-model="formInline.order_volume" placeholder="体积" style="width: 310px"></el-input></td>
+                      性别：<td>
+                      <el-select v-model="formInline.driver_gender" placeholder="性别" style="width: 310px">
+                        <el-option label="男" value="1"></el-option>
+                        <el-option label="女" value="2"></el-option>
+                      </el-select></td>
+                      年龄：<td><el-input v-model="formInline.driver_age" placeholder="年龄" style="width: 310px"></el-input></td>
                     </tr><hr>
                     <tr>
-                      创建订单时间：<td><el-input v-model="formInline.order_creationtime" placeholder="创建订单时间" style="width: 310px"></el-input></td><hr>
-                      修改订单时间：<td><el-input v-model="formInline.order_modifytime" placeholder="修改订单时间" style="width: 310px"></el-input></td>
+                      邮箱：<td><el-input v-model="formInline.driver_mailbox" placeholder="邮箱" style="width: 310px"></el-input></td><hr>
+                      手机号：<td><el-input v-model="formInline.driver_phonenumber" placeholder="手机号" style="width: 310px"></el-input></td>
                     </tr><hr>
-                    <tr>
-                      货物类型：<td><el-input v-model="formInline.order_cargotype" placeholder="货物类型" style="width: 310px"></el-input></td><hr>
-                      车辆类型：<td><el-input v-model="formInline.cartype_id" placeholder="车辆类型" style="width: 310px"></el-input></td>
-                    </tr><hr>
-                    <tr>
-                      联系人：<td><el-input v-model="formInline.order_linkmanname" placeholder="联系人" style="width: 310px"></el-input></td><hr>
-                      电话：<td><el-input v-model="formInline.order_linkmanphone" placeholder="电话" style="width: 310px"></el-input></td>
-                    </tr><hr>
-                    <tr>
-                      备注：
-                      <td colspan="4">
-                         <el-input type="textarea" v-model="formInline.order_reason" style="width: 720px;"></el-input>
+                      <tr>
+                        头像：<td colspan="4">
+                        <el-upload
+                        class="upload"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess">
+                        <img v-if="formInline.driver_headportrait" :src="formInline.driver_headportrait" style="width: 100%;">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      </el-upload>
                       </td>
-                    </tr>
+                      </tr>
                     </table>
                   </el-form-item><br>
                   <el-form-item style="margin-left: 600px">
@@ -218,7 +228,7 @@ import recommend from "@/components/firstPage/recommend";
 import Tpyhead from "@/components/firstPage/Tpyhead";
 import qs from "qs";
 export default {
-  name: "logistcsAddOrder",
+  name: "logistcsAddDriver",
   components: {
     recommend,
     Tpyhead,
@@ -227,19 +237,7 @@ export default {
   data() {
     return {
         formInline: {
-            order_departure: '',
-            order_destination: '',
-            order_cargotype: '',
-            order_weight: '',
-            order_volume: '',
-            order_linkmanphone: '',
-            order_linkmanname: '',
-            order_creationtime: '',
-            order_modifytime: '',
-            order_reason: '',
-            cartype_id: ''
         },
-        formInline:{},
         select: "",
         queryForm: {},
         GoodsNames: {
@@ -255,10 +253,13 @@ export default {
     };
   },
   methods: {
+      handleAvatarSuccess(res, file) {
+          this.imageUrl = URL.createObjectURL(file.raw);
+      },
       addSubmit(){
           console.log(this.formInline)
           axios({
-              url:"rest//torder/add",
+              url:"rest/driver/add",
               method:"post",
               data:this.formInline
           }).then(res=>{

@@ -207,7 +207,7 @@
                   <el-row>
                     <el-col :span="24">
                       <div style="width:100%"></div>
-                      <img src="../../assets/pc1.jpg" style="width: 100%;t;margin-top: 20px;" />
+                      <img src="../../assets/pc1.jpg" style="width: 100%;margin-top: 20px;" />
                     </el-col>
                   </el-row>
                 </el-col>
@@ -262,8 +262,6 @@
 
 <script>
 import axios from "axios";
-import { getToken } from "@/permissions/auth";
-import top from "@/components/firstPage/top";
 import recommend from "@/components/firstPage/recommend";
 import Tpyhead from "@/components/firstPage/Tpyhead";
 import qs from "qs";

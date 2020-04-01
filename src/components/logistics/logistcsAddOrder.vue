@@ -55,7 +55,6 @@
           <div style="margin-top: 50px; ">
             <el-input
               placeholder="请输入内容"
-              v-model="GoodsNames.findName"
               style="border:1px solid #FF9640"
             >
               <el-select v-model="select" slot="prepend" placeholder="类型">
@@ -136,7 +135,6 @@
                 class="demonstration"
                 style="float:left;padding-top:10px;color:white;margin-left:1%"
               >太平洋集团物流后台管理首页</span>
-
               <span class="demonstration" style="float:right;padding-top:10px;margin-right:1%">
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link" style="color:white">
@@ -152,88 +150,51 @@
                 </el-dropdown>
               </span>
             </div>
-            <!-- 主体 -->
-            <div style="margin-top:5px">
-              <el-row>
-                <!-- 左侧的 -->
-                <el-col :span="3">
-                  <div style="min-height:1000px;"></div>
-                </el-col>
-                <!-- 物流明细 -->
-                <el-col :span="16">
-                  <div style="background-color:#9AB3CC;min-height:1000px;">
-                    <el-menu
-                      :default-active="activeIndex"
-                      class="el-menu-demo"
-                      mode="horizontal"
-                      @select="handleSelect"
-                    >
-                      <el-menu-item index="1" @click="screen">所有订单</el-menu-item>
-                      <el-menu-item index="2" @click="screen">已收货</el-menu-item>
-                      <el-menu-item index="3" @click="screen">未完成</el-menu-item>
-                      <el-menu-item index="4" @click="screen">驳回</el-menu-item>
-                    </el-menu>
-                    <el-table border :data="tableData" stripe>
-                      <el-table-column label="出发地→目的地">
-                        <template
-                          slot-scope="scope"
-                        >{{scope.row.order_departure}}→{{scope.row.order_destination}}</template>
-                      </el-table-column>
-                      <el-table-column prop="order_cargotype" label="货物类型"></el-table-column>
-                      <el-table-column prop="order_latest" label="最迟到达时间"></el-table-column>
-                      <el-table-column prop="order_weight" label="货物重量"></el-table-column>
-                      <el-table-column prop="order_creationtime" label="创建订单时间"></el-table-column>
-                      <el-table-column prop="order_linkmanphone" label="联系电话"></el-table-column>
-                      <el-table-column prop="order_linkmanname" label="联系姓名"></el-table-column>
-                      <el-table-column prop="order_reason" label="状态"></el-table-column>
-
-                      <el-table-column label="操作" width="100">
-                        <template slot-scope="scope">
-                          <el-button
-                            @click="handleClick(scope.row.order_id)"
-                            type="text"
-                            size="small"
-                          >详情</el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </div>
-                  <el-row>
-                    <el-col :span="24">
-                      <div style="width:100%"></div>
-                      <img src="../../assets/pc1.jpg" style="width: 100%;t;margin-top: 20px;" />
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <!-- 右侧推荐 -->
-                <el-col :span="5">
-                  <el-card class="box-card">
-                    <div slot="header" class="clearfix">
-                      <h2>地图找车</h2>
-                    </div>
-                    <div>
-                      <img
-                        src="../../assets/mapImg.jpg"
-                        style="width:100%;display: block;"
-                        class="image"
-                      />
-                    </div>
-                  </el-card>
-                  <el-card class="box-card">
-                    <div slot="header" class="clearfix">
-                      <h2>联系我们</h2>
-                    </div>
-                    <div>
-                      <img
-                        src="../../assets/carMy/lianxi.png"
-                        style="width:100%;display: block;"
-                        class="image"
-                      />
-                    </div>
-                  </el-card>
-                </el-col>
-              </el-row>
-            </div>
+            <el-main>
+              <template>
+                <el-form :inline="true" :model="formInline" class="demo-form-inline"  style="margin-left: 350px">
+                  <el-form-item >
+                    <table cellspacing="0" border="1" style="border-collapse:collapse;">
+                    <tr >
+                      出发地：<td><el-input v-model="formInline.order_departure" placeholder="出发地" style="width: 310px"></el-input></td><hr>
+                      到达地：<td><el-input v-model="formInline.order_destination" placeholder="到达地" style="width: 310px"></el-input></td>
+                    </tr><hr>
+                    <tr>
+                      重量：<td><el-input v-model="formInline.order_weight" placeholder="重量" style="width: 310px"></el-input></td><hr>
+                      体积：<td><el-input v-model="formInline.order_volume" placeholder="体积" style="width: 310px"></el-input></td>
+                    </tr><hr>
+                    <tr>
+                      创建订单时间：<td><el-date-picker type="date" placeholder="创建订单时间" v-model="formInline.order_creationtime" style="width: 310px"></el-date-picker></td><hr>
+                      修改订单时间：<td><el-date-picker type="date" placeholder="修改订单时间" v-model="formInline.order_modifytime" style="width: 310px"></el-date-picker></td>
+                    </tr><hr>
+                    <tr>
+                      货物类型：<td><el-input v-model="formInline.order_cargotype" placeholder="货物类型" style="width: 310px"></el-input></td><hr>
+                      车辆类型：<td>
+                      <el-select v-model="formInline.cartype_id" placeholder="车辆类型" style="width: 310px">
+                        <el-option label="奔驰" value="1"></el-option>
+                        <el-option label="奥迪" value="2"></el-option>
+                      </el-select></td>
+                    </tr><hr>
+                    <tr>
+                      联系人：<td><el-input v-model="formInline.order_linkmanname" placeholder="联系人" style="width: 310px"></el-input></td><hr>
+                      电话：<td><el-input v-model="formInline.order_linkmanphone" placeholder="电话" style="width: 310px"></el-input></td>
+                    </tr><hr>
+                    <tr>
+                      备注：
+                      <td colspan="4">
+                         <el-input type="textarea" v-model="formInline.order_reason" style="width: 720px;"></el-input>
+                      </td>
+                    </tr>
+                    </table>
+                  </el-form-item><br>
+                  <el-form-item style="margin-left: 600px">
+                    <el-button type="primary" @click="addSubmit">添加</el-button>
+                    <el-button @click="resetForm()">取消</el-button>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </el-main>
+            <Commont></Commont>
           </div>
         </template>
       </el-col>
@@ -256,105 +217,69 @@
 
 <script>
 import axios from "axios";
-import { getToken } from "@/permissions/auth";
-import top from "@/components/firstPage/top";
+import Commont from "@/components/firstPage/Commont";
 import recommend from "@/components/firstPage/recommend";
 import Tpyhead from "@/components/firstPage/Tpyhead";
 import qs from "qs";
 export default {
-  name: "logisticsPage",
+  name: "logistcsAddOrder",
   components: {
     recommend,
-    Tpyhead
+    Tpyhead,
+      Commont
   },
   data() {
     return {
-      tableData: [],
-      activeIndex: "1", //table表格用的
-      carList: [],
-      detailList: [],
-      look: [],
-      count: 0,
+        formInline:{},
+        select: "",
+        queryForm: {},
+        GoodsNames: {
+            findName: "",
+            t_name: "ab",
+            t_type_id: ""
+        },
       headers: {
         "Access-Control-Allow-Origin": "http://127.0.0.1:8100"
       },
-      action: "", //路径
-      select: "",
-      TreeSee: true, //判断是否显示
-      TreeTable: false, //列表的树
-
-      Myposition: "static", //轮播图的
       UserForm: { user: {} }, //用于用户存储
-      queryForm: {
-        pageNo: 1,
-        pageSize: 10
-      }, //单选框
-
       src: require("../../assets/logo3.jpg"), //太平洋logo
-      GoodsNames: {
-        findName: "",
-        t_name: "",
-        t_type_id: ""
-      }, //查询
-      curnum: 1, //当前页
-      pageCount: 10 //最大页数
     };
   },
   methods: {
-    //   订单明细
-    handleClick(order_id) {
-      this.$router.push("/logistcsOrderDetail");
-    },
-    //获取所有订单
-    getList() {
-      console.log(5);
-      axios({
-        url: "/rest/torder/list",
-        method: "post",
-        data: this.queryForm
-      }).then(res => {
-        this.tableData = res.data.list;
-        console.log(res.data.list);
-        this.pageCount = res.data.pages;
-
-        this.tableData.forEach(a => {
-          this.carList = a.carList;
-          // console.log(this.carList)
-          this.cartype_name = a.cartype_name;
-
-          this.detailList = a.detailList;
-          this.order_detail_ifarrive = a.order_detail_ifarrive;
-        });
-      });
-    },
-    screen(id) {},
-    handleSelect(key, keyPath) {
-      //导航菜单点击事件
-      console.log(key, keyPath);
-    },
+      addSubmit(){
+          console.log(this.formInline)
+          axios({
+              url:"rest//torder/add",
+              method:"post",
+              data:this.formInline
+          }).then(res=>{
+              this.$message("添加成功")
+          })
+      },
+      resetForm() {
+          this.$router.go(0)
+      },
+      submit() {
+          if (this.GoodsNames.findName != "") {
+              this.TreeSee = false; //干掉萝卜兔
+              this.TreeTable = true; //放开表格树
+              // this.Myposition = "absolute"; //暂时下先不用
+          }
+          // console.log(this.GoodsNames.findName);
+          axios({
+              url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=12",
+              method: "post",
+              data: qs.stringify({ t_name: this.GoodsNames.findName })
+          }).then(res => {
+              this.pageCount = res.data.pageSize;
+              this.curnum = res.data.pageNum;
+          });
+      },
     // 进入用户后台
     form() {
       let id = this.UserForm.user.userId;
       console.log(id);
       this.$router.push("/form" + id);
-    },
-
-    // 搜索框的方法
-    submit() {
-      if (this.GoodsNames.findName != "") {
-        this.TreeSee = false; //干掉萝卜兔
-        this.TreeTable = true; //放开表格树
-        // this.Myposition = "absolute"; //暂时下先不用
-      }
-      // console.log(this.GoodsNames.findName);
-      axios({
-        url: "/rest/goods/findList?pageNum=" + this.curnum + "&pageSize=12",
-        method: "post",
-        data: qs.stringify({ t_name: this.GoodsNames.findName })
-      }).then(res => {
-        this.pageCount = res.data.pageSize;
-        this.curnum = res.data.pageNum;
-      });
     },
     // 搜索下分类
     onSubmit() {
@@ -374,25 +299,21 @@ export default {
       }
     },
 
-    // 判断用户
-    getUser() {
-      /*this.UserForm = getToken();*/
-      this.UserForm = null;
-      console.log("欢迎用户:" + this.UserForm.user.userId);
-      // this.UserForm = "";
-      if (this.GoodsNames.t_name != "") {
-        this.TreeSee = false;
-        this.Myposition = "absolute";
+      // 判断用户
+      getUser() {
+          this.UserForm.user = 'a';
+          console.log("欢迎用户:" + this.UserForm.user.userId);
+          // this.UserForm = "";
+          if (this.GoodsNames.t_name != "") {
+              this.Myposition = "absolute";
+          }
       }
-    }
   },
   mounted() {
     this.getUser(),
-      this.getList(),
       (this.action = "http://localhost:8100/upLoadExcel/");
   },
   created() {
-    this.getList();
   }
 };
 </script>
@@ -420,45 +341,9 @@ export default {
   padding-left: 20px;
   font-style: italic;
 }
-.el-tree {
-  color: black;
-  height: 498px;
-  overflow: auto;
-  border: 1px solid #4db5f1;
-}
-.el-tree-node__content:hover {
-  height: 60px;
-  background-color: #4db5f1;
-}
-.el-tree-node__content {
-  height: 62px;
-  background-color: white;
-}
-.eL-tree-node:focus > .el-tree-node__content {
-  background-color: #97a8be;
-}
-.el-tree-node.is-current {
-  background-color: #ffff99;
-}
-.el-tree-node_expand-icon {
-}
-.el-tree-node_content {
-  height: 60px;
-  line-height: 2.5rem;
-}
-
 .aa {
   background: url("../../assets/页脚.gif");
   background-repeat: no-repeat;
   background-size: 100% 100%;
-}
-.el-header {
-  background-color: #b3c0d1;
-  color: #333;
-  line-height: 60px;
-}
-
-.el-aside {
-  color: #333;
 }
 </style>

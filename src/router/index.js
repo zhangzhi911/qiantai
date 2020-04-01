@@ -33,6 +33,10 @@ import logisregister from '@/logis/logisregister'
 //订单
 import logistcsOrderDetail from '@/components/logistics/logistcsOrderDetail'
 import logistcsOrder from '@/components/logistics/logistcsOrder'
+import logistcsAddOrder from '@/components/logistics/logistcsAddOrder'
+import logistcsAddDriver from '@/components/logistics/logistcsAddDriver'
+import logistcsAddCar from '@/components/logistics/logistcsAddCar'
+
 // 物流后台
 import logisticsPageback from '@/components/logistics/logisticsPage/'
 import Page1 from '@/components/logistics/page1'
@@ -189,6 +193,21 @@ export default new Router({
       path: '/logistcsOrderDetail',
       name: 'logistcsOrderDetail',
       component: logistcsOrderDetail
+    },
+    {
+      path: '/logistcsAddDriver',
+      name: 'logistcsAddDriver',
+      component: logistcsAddDriver
+    },
+    {
+      path: '/logistcsAddCar',
+      name: 'logistcsAddCar',
+      component: logistcsAddCar
+    },
+    {
+      path: '/logistcsAddOrder',
+      name: 'logistcsAddOrder',
+      component: logistcsAddOrder
     },
     {
       path: '/logisticsPageback',

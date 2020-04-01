@@ -156,33 +156,37 @@
                   <el-form-item >
                     <table cellspacing="0" border="1" style="border-collapse:collapse;">
                     <tr >
-                      出发地：<td><el-input v-model="formInline.order_departure" placeholder="出发地" style="width: 310px"></el-input></td><hr>
-                      到达地：<td><el-input v-model="formInline.order_destination" placeholder="到达地" style="width: 310px"></el-input></td>
+                      车辆名称：<td><el-input v-model="formInline.car_name" placeholder="车辆名称" style="width: 310px"></el-input></td><hr>
+                      车辆等级：<td><el-input v-model="formInline.car_grade" placeholder="车辆等级" style="width: 310px"></el-input></td>
                     </tr><hr>
                     <tr>
-                      重量：<td><el-input v-model="formInline.order_weight" placeholder="重量" style="width: 310px"></el-input></td><hr>
-                      体积：<td><el-input v-model="formInline.order_volume" placeholder="体积" style="width: 310px"></el-input></td>
+                      年检：<td><el-input v-model="formInline.car_annualinspection" placeholder="年检" style="width: 310px"></el-input></td><hr>
+                      车辆使用年限：<td><el-input v-model="formInline.car_durableyears" placeholder="车辆使用年限" style="width: 310px"></el-input></td>
                     </tr><hr>
+                      <tr>
+                        重量：<td><el-input v-model="formInline.car_weight" placeholder="重量" style="width: 310px"></el-input></td><hr>
+                        长度：<td><el-input v-model="formInline.car_length" placeholder="长度" style="width: 310px"></el-input></td>
+                      </tr><hr>
+                      <tr>
+                        最大载重：<td><el-input v-model="formInline.car_maximum" placeholder="最大载重" style="width: 310px"></el-input></td><hr>
+                        是否闲置：<td><el-input v-model="formInline.car_ifunused" placeholder="是否闲置" style="width: 310px"></el-input></td>
+                      </tr><hr>
                     <tr>
-                      创建订单时间：<td><el-date-picker type="date" placeholder="创建订单时间" v-model="formInline.order_creationtime" style="width: 310px"></el-date-picker></td><hr>
-                      修改订单时间：<td><el-date-picker type="date" placeholder="修改订单时间" v-model="formInline.order_modifytime" style="width: 310px"></el-date-picker></td>
-                    </tr><hr>
-                    <tr>
-                      货物类型：<td><el-input v-model="formInline.order_cargotype" placeholder="货物类型" style="width: 310px"></el-input></td><hr>
+                      颜色：<td><el-input v-model="formInline.car_colour" placeholder="颜色" style="width: 310px"></el-input></td><hr>
                       车辆类型：<td>
-                      <el-select v-model="formInline.cartype_id" placeholder="车辆类型" style="width: 310px">
-                        <el-option label="奔驰" value="1"></el-option>
-                        <el-option label="奥迪" value="2"></el-option>
+                      <el-select v-model="formInline.car_type" placeholder="车辆类型" style="width: 310px">
+                        <el-option label="奔驰A" value="1"></el-option>
+                        <el-option label="奥迪B" value="2"></el-option>
                       </el-select></td>
                     </tr><hr>
                     <tr>
-                      联系人：<td><el-input v-model="formInline.order_linkmanname" placeholder="联系人" style="width: 310px"></el-input></td><hr>
-                      电话：<td><el-input v-model="formInline.order_linkmanphone" placeholder="电话" style="width: 310px"></el-input></td>
+                      运送价格：<td><el-input v-model="formInline.car_price" placeholder="运送价格" style="width: 310px"></el-input></td><hr>
+                      车牌号：<td><el-input v-model="formInline.car_licenseplatenumber" placeholder="车牌号" style="width: 310px"></el-input></td>
                     </tr><hr>
                     <tr>
                       备注：
                       <td colspan="4">
-                         <el-input type="textarea" v-model="formInline.order_reason" style="width: 720px;"></el-input>
+                         <el-input type="textarea" v-model="formInline.car_remark" style="width: 720px;"></el-input>
                       </td>
                     </tr>
                     </table>
@@ -222,7 +226,7 @@ import recommend from "@/components/firstPage/recommend";
 import Tpyhead from "@/components/firstPage/Tpyhead";
 import qs from "qs";
 export default {
-  name: "logistcsAddOrder",
+  name: "logistcsAddCar",
   components: {
     recommend,
     Tpyhead,
@@ -249,7 +253,7 @@ export default {
       addSubmit(){
           console.log(this.formInline)
           axios({
-              url:"rest//torder/add",
+              url:"rest/tcar/add",
               method:"post",
               data:this.formInline
           }).then(res=>{
